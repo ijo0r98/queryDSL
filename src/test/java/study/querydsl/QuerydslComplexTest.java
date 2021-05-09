@@ -350,6 +350,4 @@ public class QuerydslComplexTest {
     }
 
 
-
-
 }
