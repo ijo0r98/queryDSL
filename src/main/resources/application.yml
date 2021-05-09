@@ -10,8 +10,7 @@ jpa:
     ddl-auto: create
   properties:
     hibernate:
-      # system.out
-#      show_sql: true
+      show_sql: true
       format_sql: true
       use_sql_comments: true
 

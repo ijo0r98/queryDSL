@@ -286,6 +286,7 @@ public class QuerydslBasicTest {
     /**
      * 예) 회원과 팀을 조인하면서 팀 이름이 teamA인 팀만 조인, 회원은 모두 조회
      * JPQL: select m, t from Member m left join m.team t on t.name = 'teamA'
+     * SQL: SELECT m.*, t.* FROM Member m LEFT JOIN Team t ON m.TEAM_ID=t.id and t.name='teamA'
      */
     @Test
     public void join_on_filtering() {
@@ -338,6 +339,7 @@ public class QuerydslBasicTest {
 
         Member findMember = queryFactory
                 .selectFrom(member)
+                .join(member.team, team)
                 .where(member.username.eq("member1"))
                 .fetchOne();
 
@@ -390,8 +392,6 @@ public class QuerydslBasicTest {
     @Test
     public void subQueryGoe() {
 
-        // 서브쿼리에서 쓰는 멤버
-        // 서브쿼리와 밖의 쿼리에서 쓰는 별칭이 같으면 안됨
         QMember memberSub = new QMember("memberSub");
 
         List<Member> result = queryFactory
@@ -527,6 +527,5 @@ public class QuerydslBasicTest {
             System.out.println("s: " + s);
         }
     }
-
 
 }
