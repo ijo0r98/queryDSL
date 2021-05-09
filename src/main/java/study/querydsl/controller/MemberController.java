@@ -26,4 +26,5 @@ public class MemberController {
     public List<MemberTeamDto> searchMemberV1(MemberSearchCondition condition) {
         return memberJpaRepository.searchByWhereParam(condition);
     }
+
 }
