@@ -1,4 +1,4 @@
-package study.querydsl.controller;
+package study.querydsl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;

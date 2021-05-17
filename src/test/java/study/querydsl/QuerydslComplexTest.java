@@ -142,6 +142,7 @@ public class QuerydslComplexTest {
         QMember memberSub = new QMember("memberSub");
         List<UserDto> result2 = queryFactory
                 .select(Projections.fields(UserDto.class,
+//                        member.username.as("name"),
                         ExpressionUtils.as(member.username, "name"), //ExpressionUtils.as(source, alias)
                         ExpressionUtils.as(JPAExpressions //최대 나이로 나이 통일
                             .select(memberSub.age.max())
@@ -171,7 +172,7 @@ public class QuerydslComplexTest {
         }
     }
 
-    // @QueryProjection성
+    // @QueryProjection
     // 어노테이션이 붙은 dto도 qtype 생성
 
     @Test
