@@ -3,11 +3,13 @@ package study.querydsl.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 import study.querydsl.dto.MemberSearchCondition;
 import study.querydsl.dto.MemberTeamDto;
@@ -21,15 +23,40 @@ import static org.springframework.util.StringUtils.hasText;
 import static study.querydsl.entity.QMember.member;
 import static study.querydsl.entity.QTeam.team;
 
-public class MemberRepositoryImpl implements MemberRepositoryCustom{
+public class MemberRepositoryImpl  implements MemberRepositoryCustom{
+//public class MemberRepositoryImpl extends QuerydslRepositorySupport implements MemberRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
     public MemberRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    // querydsl
+//    public MemberRepositoryImpl() {
+//        super(Member.class);
+//        // querydsl
+//        // entity manager
+//    }
+
     @Override
     public List<MemberTeamDto> search(MemberSearchCondition condition) {
+//        EntityManager entityManager = getEntityManager();
+
+        //querydsl support
+//        List<MemberTeamDto> result = from(member)
+//                .leftJoin(member.team, team)
+//                .where(usernameEq(condition.getUsername()),
+//                        teamNameEq(condition.getTeamName()),
+//                        ageGoe(condition.getAgeGoe()),
+//                        ageLoe(condition.getAgeLoe()))
+//                .select(new QMemberTeamDto(
+//                member.id.as("memberId"),
+//                member.username,
+//                member.age,
+//                team.id.as("teamId"),
+//                team.name.as("teamName")))
+//                .fetch();
+
         return queryFactory
                 .select(new QMemberTeamDto(
                         member.id.as("memberId"),
@@ -100,14 +127,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
         long total = queryFactory
                 .select(member)
                 .from(member)
-//                .leftJoin(member.team, team)
+    //                .leftJoin(member.team, team)
                 .where(usernameEq(condition.getUsername()),
                         teamNameEq(condition.getTeamName()),
                         ageGoe(condition.getAgeGoe()),
                         ageLoe(condition.getAgeLoe()))
                 .fetchCount();
 
-//        return new PageImpl<>(content, pageable, total); // Page 구현체 PageImpl
+    //        return new PageImpl<>(content, pageable, total); // Page 구현체 PageImpl
 
         // count 쿼리 필요시에만 실행
         JPAQuery<Member> countQeury = queryFactory
@@ -125,6 +152,26 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
          * 첫번째 페이지에서 페이지보다 전체 수가 더 적을 때 등등
          */
     }
+
+//    public Page<MemberTeamDto> searchPageByQuerydslSupport(MemberSearchCondition condition, Pageable pageable) {
+//        JPQLQuery<MemberTeamDto> jpaQuery = from(member)
+//                .leftJoin(member.team, team)
+//                .where(
+//                        usernameEq(condition.getUsername()),
+//                        teamNameEq(condition.getTeamName()),
+//                        ageGoe(condition.getAgeGoe()),
+//                        ageLoe(condition.getAgeLoe())
+//                )
+//                .select(new QMemberTeamDto(
+//                        member.id.as("memberId"),
+//                        member.username,
+//                        member.age,
+//                        team.id.as("teamId"),
+//                        team.name.as("teamName")));
+//
+//        getQuerydsl().applyPagination(pageable, jpaQuery); //offset, limit 처리
+//        jpaQuery.fetchResults();
+//    }
 
     private BooleanExpression usernameEq(String username) {
         return hasText(username) ? member.username.eq(username) : null;

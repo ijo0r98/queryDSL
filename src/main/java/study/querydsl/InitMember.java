@@ -17,7 +17,8 @@ import javax.persistence.PersistenceContext;
 @RequiredArgsConstructor
 public class InitMember {
 
-    private final InitMemberService initMemberService;
+
+    private InitMemberService initMemberService;
 
     @PostConstruct
     public void init() {
