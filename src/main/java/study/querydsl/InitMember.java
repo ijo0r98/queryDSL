@@ -13,10 +13,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Profile("local")
-@Component
+@Component //스프링 빈으로 자동 등록
 @RequiredArgsConstructor
 public class InitMember {
-
 
     private InitMemberService initMemberService;
 
@@ -25,6 +24,7 @@ public class InitMember {
         initMemberService.init();
     }
 
+    @Component
     static class InitMemberService {
         @PersistenceContext
         private EntityManager em;
